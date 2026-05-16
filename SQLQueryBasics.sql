@@ -13,7 +13,7 @@ EXEC sp_databases
 -- Note: Both of them used but sys.databases more used then sp_databases sys.databases provide filter and other specification
 
 SELECT * FROM sys.databases
-
+SELECT * from sys.tables
 -- creating a db
 CREATE DATABASE SCHOOL
 CREATE DATABASE Temp
@@ -54,11 +54,15 @@ CREATE TABLE Students(
 -- Check Tables using system procedure sp_help 'tablename'
 EXEC sp_help 'Students' --return table structure 
 
+--alternate of sp_help best for detailed use view 
+SELECT * FROM sys.all_columns -- sys.columns is a catalog view that stores metadata about table columns.
+WHERE object_id = OBJECT_ID('Students') -- OBJECT_ID is a method return any table,database,view/object ki unique objectid
+
 /*
 SQL server internally apni table ki information bhi store kart hai isko views se check kar sakta hai example
 */
 
-SELECT * FROM sys.tables  -- return table detailed list
+SELECT * FROM sys.tables  -- return tables
 
 
 SELECT COUNT(*) FROM sys.tables  -- return total no of tables method 1 most comman used
@@ -66,7 +70,7 @@ SELECT COUNT(*) FROM sys.tables  -- return total no of tables method 1 most comm
 -- second way to check how many tables in database using system procedure
 USE SCHOOL 
 GO
-EXEC sp_tables  -- Note Better for Not used this system procedure prefer always views 
+EXEC sp_tables  -- Note Better for Not used this system procedure prefer always views return table detail list
 
 
 -- insert SINGLE data in tables
@@ -112,6 +116,4 @@ WHERE 1=1  -- 1 = 1 means all data delete but ye auto clean nahi kare ga next it
 -- Search baburao name and grade both
 SELECT name,grade FROM Students
 WHERE age = 49
-
-
 
