@@ -3,7 +3,7 @@ USE EastIndiaCompany  -- Select Current data base
 
 SELECT DB_NAME()  -- return current used db name
 
-create TABLE employee
+CREATE TABLE employee
 (
   empId INT IDENTITY(1,1),
   name VARCHAR(100) NOT NULL,
@@ -18,12 +18,66 @@ create TABLE employee
   CONSTRAINT PrimaryKey_empId PRIMARY KEY (empId),
 )
 
-SELECT * FROM sys.all_columns
-WHERE object_id = OBJECT_ID('employee') -- return table stucture using a catalog view 
+CREATE TABLE customer(
+ cId INT IDENTITY(101,1),
+ cFirstName VARCHAR(50) NOT NULL,
+ cLastName VARCHAR(50) DEFAULT 'NOT PROVIDED',
+ cEmail VARCHAR(70) UNIQUE NOT NULL CHECK (cEmail LIKE '%@%.%')
+)
+--after creating table altering in table by default altering column
+--add means add a column in table purchasedData is column name datatype constraints 
+ALTER TABLE customer
+ADD purchasedDate DATETIME DEFAULT GETDATE() 
+
+ALTER TABLE customer
+ADD phoneno VARCHAR(10) UNIQUE NOT NULL --add new phoneno column
+
+-- remove constraint unique
+ALTER TABLE customer
+DROP CONSTRAINT UQ__customer__960E13C73732A37D
+
+ALTER TABLE customer 
+ALTER COLUMN phoneNo VARCHAR(12) NOT NULL  -- change data type in column jo phle de rakha hai or ab nahi diya to change ho zaye ga
+
+ALTER TABLE customer
+ALTER COLUMN cLastName VARCHAR(50) NOT NULL
+
+ALTER TABLE customer
+ADD CONSTRAINT default_value DEFAULT 'NOT PROVIDED' FOR cLastName
+
+
+-- add contraint
+ALTER TABLE customer
+ADD CONSTRAINT unique_constraint UNIQUE (phoneNO)
+
+-- add another constraint
+ALTER TABLE customer
+ADD CONSTRAINT primary_key_phone PRIMARY KEY (phoneNo)
+
+-- add default constraint
+ALTER TABLE customer
+ADD CONSTRAINT default_phone DEFAULT 1230000890 FOR phoneNo
+
+-- drop constraint primary key using constraint name
+ALTER TABLE customer
+DROP CONSTRAINT primary_key_phone
+
+EXEC sp_rename 'customer.phoneno','phoneNo','COLUMN';  -- rename column name
+
+EXEC sp_rename 'customers','customer'; -- table name rename
+
+EXEC sp_help 'customer' -- return table structure in details
 
 EXEC sp_help 'employee' -- return table structure in details
 
-SELECT top 20 * FROM employee ORDER BY totalSalary Desc
+select * from sys.tables -- return all table list
+
+SELECT name, type_desc FROM sys.objects WHERE parent_object_id = OBJECT_ID('customer'); -- return all constraint name that are applied in table
+
+SELECT * FROM sys.all_columns
+WHERE object_id = OBJECT_ID('employee') -- return table stucture using a catalog view 
+
+SELECT top 20 * FROM employee ORDER BY totalSalary -- return top 20 row  
 
 
 INSERT INTO employee
