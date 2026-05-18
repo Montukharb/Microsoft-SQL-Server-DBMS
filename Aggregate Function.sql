@@ -52,11 +52,49 @@ FROM premimumCustomer GROUP BY department
  The main query (outer query) then uses that result.
 */
 
--- find employee by minimum salary in each department
-SELECT * FROM premimumCustomer p WHERE salary = (SELECT MIN(salary) FROM premimumCustomer WHERE department = p.department)
-
 --find highest pay employee name
 SELECT * FROM premimumCustomer WHERE salary = (SELECT MAX(salary) FROM premimumCustomer)
 
 SELECT * FROM premimumCustomer
 
+/*
+Single Row Subquery => where, Having
+Multiple Row Subquery => IN,ANY,ALL
+Correlated Subquery => where, Select Note: Depend outer query
+Nested Subquery 
+Scalar Subquery
+EXISTS Subquery
+NOT EXISTS Subquery
+*/
+
+--1. single row subquery used with [ where , having ]
+SELECT * FROM premimumCustomer WHERE salary > (SELECT AVG(salary) FROM premimumCustomer) -- found employee whose salaries are above average.
+
+-- 2. Multiple Row SubQuery { in means a or b, any means koi bhi eak , all means ferfect true both side like and operation }
+SELECT * FROM premimumCustomer WHERE salary IN ( SELECT salary FROM premimumCustomer WHERE salary > 120000 )
+SELECT * FROM premimumCustomer WHERE salary  > ANY ( SELECT salary FROM premimumCustomer WHERE salary >= 80000 )
+
+-- 3. Crrelated subquery inner query outer query par depend karti hai 
+-- outer query ki har row ka liya inner query run hoti hai 
+
+-- find employee by minimum salary in each department
+SELECT * FROM premimumCustomer p WHERE salary = (SELECT MIN(salary) FROM premimumCustomer WHERE department = p.department)
+
+-- 4.Nested subQuery means subquery ka ander eak or subquery
+SELECT * FROM premimumCustomer WHERE department = (SELECT department FROM premimumCustomer WHERE salary >= (SELECT MAX(salary) FROM premimumCustomer))
+
+--5.Scalar subquery mostly select clause ma use hoti hai single value return karti hai example
+SELECT fname,lname,salary,(SELECT CONVERT(DECIMAL( 12,2 ), AVG(salary) ) FROM premimumCustomer) AS [AVERAGE SALARY] FROM premimumCustomer
+
+--6.EXISTS subquery check karta hai row exist karti hai ya nahi
+SELECT * FROM premimumCustomer P WHERE EXISTS (SELECT 1 FROM premimumCustomer WHERE department = P.department )
+
+SELECT *
+FROM premimumCustomer P
+WHERE NOT EXISTS
+(
+   SELECT 1
+   FROM premimumCustomer 
+   WHERE Department = P.department
+   AND Salary > 70000
+)
