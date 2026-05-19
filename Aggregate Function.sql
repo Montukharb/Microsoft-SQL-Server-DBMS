@@ -74,7 +74,7 @@ SELECT * FROM premimumCustomer WHERE salary > (SELECT AVG(salary) FROM premimumC
 SELECT * FROM premimumCustomer WHERE salary IN ( SELECT salary FROM premimumCustomer WHERE salary > 120000 )
 SELECT * FROM premimumCustomer WHERE salary  > ANY ( SELECT salary FROM premimumCustomer WHERE salary >= 80000 )
 
--- 3. Crrelated subquery inner query outer query par depend karti hai 
+-- 3. Correlated subquery inner query outer query par depend karti hai 
 -- outer query ki har row ka liya inner query run hoti hai 
 
 -- find employee by minimum salary in each department

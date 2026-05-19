@@ -1,4 +1,4 @@
--- List down EXISTING DATABASES we can write query small case or upper case select or SELECT both are same prefer Upper Case SELECT for easy reading purpose
+List -- down EXISTING DATABASES we can write query small case or upper case select or SELECT both are same prefer Upper Case SELECT for easy reading purpose
 -- two way to show all databases in ms sql server
 -- sp_databases = is a system stored procedure used to display information about databases in sql server. Means already sql server ka ander saved SQL code like a function.
 -- 1st EXEC = Execute means run procedure, sp = stored procedure, EXEC = procedure/function executer
